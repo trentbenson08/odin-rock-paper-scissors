@@ -1,5 +1,58 @@
-function getComputerChoice(){
+function game(){
+    const runningScore = { 
+        player : 0,
+        computer : 0
+    }
+    let gameOver = false;
 
+    const display = document.querySelector('#valueDisplay');
+    display.textContent = 'WELCOME!';
+
+    const buttonNodeList = document.querySelectorAll('.button');
+    buttonNodeList.forEach(btn => {
+        btn.addEventListener('click', function(e){
+            
+            let pc = e.target.getAttribute('id');
+            let cc = getComputerChoice();
+
+            if(!gameOver){
+                switch(playRound(pc, cc)){
+                    case 'player':
+                        runningScore.player++;
+                        display.textContent = `Player wins with ${pc}!`;
+                        break;
+                    case 'computer':
+                        runningScore.computer++;
+                        display.textContent = `Computer wins with ${pc}!`;
+                        break;
+                    case 'tie':
+                        display.textContent = 'Tie!';
+                        break;
+                }
+                const scoreDisplay = document.querySelector('#scoreDisplay');
+                scoreDisplay.textContent = `Player: ${runningScore.player} - Computer: ${runningScore.computer}`
+            }
+            if(runningScore.player >= 5 || runningScore.computer >= 5){
+                gameOver = true;
+                display.textContent = `${runningScore.player > runningScore.computer? 
+                                        'PLAYER': 'COMPUTER'} Wins!`
+            }
+        })
+    })
+}
+
+function playRound(pc, cc){
+    const gameData = {
+        'rock': {'win': 'scissors', 'lose': 'paper'},
+        'paper': {'win': 'rock', 'lose': 'scissors'},
+        'scissors': {'win': 'paper', 'lose': 'rock'}
+    }
+    if(gameData[pc].win === cc){return "player"}
+    else if(gameData[pc].lose === cc){return "computer"}
+    else{return "tie"}
+}
+
+function getComputerChoice(){
     const MIN = 1;
     const MAX = 3;
     let num = Math.floor(Math.random() * (MAX - MIN + 1) + MIN)
@@ -11,76 +64,7 @@ function getComputerChoice(){
     }
     else if(num === 3){
         return "scissors"
-    }
-    
+    }   
 }
-
-function getPlayerChoice(){
-    while(1){
-        let choice = prompt("Rock, Paper, or Scissors?")
-        if(choice.toLowerCase() === "rock"){
-            return "rock"
-        }
-        else if(choice.toLowerCase() === "paper"){
-            return "paper"
-        }
-        else if(choice.toLowerCase() === "scissors"){
-            return "scissors"
-        }
-        else{
-            console.log("Error. Incorrect input.")
-        }
-    }
-}
-
-function playRound(pc, cc){
-    const gameData = {
-        'rock': {'win': 'scissors', 'lose': 'paper'},
-        'paper': {'win': 'rock', 'lose': 'scissors'},
-        'scissors': {'win': 'paper', 'lose': 'rock'}
-    }
-
-    if(gameData[pc].win === cc){
-        return "player"
-    }
-    else if(gameData[pc].lose === cc){
-        return "computer"
-    }
-    else{
-        return "tie"
-    }
-}
-
-function game(){
-    const runningScore = { 
-        player : 0,
-        computer : 0
-    }
-
-    for(let i = 1; i < 6; i++){
-        const playerChoice = getPlayerChoice();
-        const computerChoice = getComputerChoice(); 
-        
-        const result = playRound(playerChoice, computerChoice);
-
-        if(result === 'tie'){
-            console.log("This round is a TIE!")
-        }
-        else{
-            runningScore[result]++;
-            console.log(`${result.toUpperCase()} wins this round!`)
-        }
-    }
-    if(runningScore.player > runningScore.computer){
-        console.log(`PLAYER wins with a score of ${runningScore.player}!`);
-    }
-    else if(runningScore.player < runningScore.computer){
-        console.log(`COMPUTER wins with a score of ${runningScore.computer}!`);
-    }
-    else{
-        console.log(`The game is a TIE. Both sides scoring a ${runningScore.player, runningScore.computer}!`)
-    }
-}
-
 
 game();
