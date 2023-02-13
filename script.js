@@ -14,7 +14,7 @@ function game(){
             
             let pc = e.target.getAttribute('id');
             let cc = getComputerChoice();
-
+            console.log(`player: ${pc} - computer: ${cc}`)
             if(!gameOver){
                 switch(playRound(pc, cc)){
                     case 'player':
@@ -23,7 +23,7 @@ function game(){
                         break;
                     case 'computer':
                         runningScore.computer++;
-                        display.textContent = `Computer wins with ${pc}!`;
+                        display.textContent = `Computer wins with ${cc}!`;
                         break;
                     case 'tie':
                         display.textContent = 'Tie!';
